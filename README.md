@@ -1,6 +1,41 @@
 # fiche-patisserie
 
-This template should help get you started developing with Vue 3 in Vite.
+A small Vue + Vite app that displays technical recipe sheets for pastry chefs — ingredient lists, steps, and metadata presented as simple, printable cards.
+
+## About
+
+This project is a lightweight front-end application intended to display clear, printable recipe sheets ("fiches techniques") for patisserie professionals. It uses mock data for quick iteration and is built with **Vue 3**, **TypeScript**, and **Vite**.
+
+## Key features ✅
+
+- Display pastry recipe sheets (title, ingredients, steps, timings, and metadata)
+- Mock data stored in `mock/recipe.json` for quick testing
+- Built with `Vue 3`, `TypeScript`, and `Vite`
+
+## Quick start 🔧
+
+1. Install dependencies:
+```sh
+npm install
+```
+2. Run the dev server:
+```sh
+npm run dev
+```
+3. Build for production:
+```sh
+npm run build
+```
+
+## Editing recipes ✏️
+
+- Update or add recipes in `mock/recipe.json`.
+- Main view: `src/views/Recipe.vue` and composable logic in `src/composables/useRecipe.ts`.
+
+## Contributing 🤝
+
+- Fork the repo, create a feature branch, and open a pull request with a short description of your changes.
+
 
 ## Recommended IDE Setup
 
