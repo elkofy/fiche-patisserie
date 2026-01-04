@@ -6,6 +6,9 @@ import vueDevTools from 'vite-plugin-vue-devtools'
 import tailwindcss from '@tailwindcss/vite'
 // https://vite.dev/config/
 export default defineConfig({
+  build : {
+    outDir : 'docs'
+  },
   plugins: [
     vue(),
     vueDevTools(),
