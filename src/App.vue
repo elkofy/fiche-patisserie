@@ -6,7 +6,9 @@ import Recipe from './views/Recipe.vue';
 
 <template>
 <Navbar></Navbar>
-<Recipe/> 
+ <main>
+    <RouterView />
+  </main>
 </template>
 
 <style scoped></style>

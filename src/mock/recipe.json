@@ -190,31 +190,12 @@
         "notes": "Faire cette étape au dernier moment pour garder les framboises croquantes"
       }
     ],
-    "nutrition": {
-      "perServing": {
-        "calories": 320,
-        "proteins": 4,
-        "fats": 18,
-        "carbohydrates": 35,
-        "fiber": 2,
-        "unit": "g"
-      },
-      "source": "Estimation"
-    },
     "cost": {
       "ingredients": 50.40,
       "labor": 15.00,
       "total": 65.40,
       "currency": "EUR",
-      "unitCost": 8.18,
-      "margin": 0.30
-    },
-    "storage": {
-      "temperature": 4,
-      "temperatureUnit": "celsius",
-      "duration": 3,
-      "durationUnit": "days",
-      "instructions": "Conserver au réfrigérateur couvert"
+      "unitCost": 8.18
     },
     "metadata": {
       "createdAt": "2024-01-15T10:30:00Z",

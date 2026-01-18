@@ -1,6 +1,5 @@
-<script setup>
+<script setup lang="ts">
 import { recipe } from '@/mock/recipe.json'
-
 </script>
 
 <template>
