@@ -10,9 +10,7 @@ const router = createRouter({
     { path: "/recipe", component: Recipe },
     { path: "/ingredients", component: IngredientList },
     { path: '/ingredients/:id', component: Ingredient },
-        { path: '/recipes/:id', component: Recipe },
-
-
+    { path: '/recipes/:id', component: Recipe },
   ],
 })
 
