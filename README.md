@@ -81,3 +81,15 @@ npm run build
 ```sh
 npm run lint
 ```
+
+
+L'ajout d'une fiche technique
+
+Ajoute le logo de naan boulangerie 
+Affichez les ustensiles 
+Affichez les différents temps de cuissons, repos 
+Enlevez la marge 
+Pouvoir ajuster la quantité à produire
+
+
+Bonus: Ajouter une vidéo

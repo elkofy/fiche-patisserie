@@ -1,7 +1,5 @@
 <script setup lang="ts">
-// @ts-nocheck
 import { recipe } from '@/mock/recipe.json'
-
 </script>
 
 <template>
@@ -19,11 +17,11 @@ import { recipe } from '@/mock/recipe.json'
 
             <div class="container mx-auto px-4 lg:col-start-1 lg:col-end-2 flex flex-col justify-center py-8 lg:pr-10">
                 <div class="flex flex-row gap-2 mb-2">
-                    <button @click="print()" class="text-white bg-gray-800 box-border border border-transparent hover:bg-brand-strong focus:ring-4 focus:ring-brand-medium shadow-xs font-medium leading-5 rounded-full text-sm px-4 py-2.5 focus:outline-none w-fit"  >🖨️</button>
+                    <button  class="text-white bg-gray-800 box-border border border-transparent hover:bg-brand-strong focus:ring-4 focus:ring-brand-medium shadow-xs font-medium leading-5 rounded-full text-sm px-4 py-2.5 focus:outline-none w-fit"  >🖨️</button>
                     <button class="text-black bg-white box-border border border-black hover:bg-brand-strong focus:ring-4 focus:ring-brand-medium shadow-xs font-medium leading-5 rounded-full text-sm px-4 py-2.5 focus:outline-none w-fit"  >🥜 Allergenes</button>
                 </div>
 
-                
+
                 <h1 class="text-5xl font-bold mb-4 tracking-tight">{{ recipe.title }}</h1>
                 <p class="text-xl text-gray-600 mb-6">{{ recipe.description }}</p>
 
@@ -39,7 +37,7 @@ import { recipe } from '@/mock/recipe.json'
                 <div class=" flex flex-col ">
                     <div>Moule: {{ recipe.mold.shape }} Ø{{  recipe.mold.dimensions.length }}cm</div>
                     <div>Portions: {{ recipe.yield.servings }} {{ recipe.yield.portions.type }}</div>
-                    <div>Durée: {{ recipe.timings.totalTime }} min</div>          
+                    <div>Durée: {{ recipe.timings.totalTime }} min</div>
                 </div>
             </div>
         </section>
@@ -105,8 +103,8 @@ import { recipe } from '@/mock/recipe.json'
                                 <div class="flex-1 text-green-800 flex items-center gap-2">Marge</div>
                                 <div class="text-left">{{ Number.parseFloat(recipe.cost.margin).toFixed(2)  }}%</div>
                             </div>
-                           
-                        
+
+
                         </div>
 
 
