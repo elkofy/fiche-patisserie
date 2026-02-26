@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(gh repo:*)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "Bash(cd /c/Users/Nassim/Documents/dev/fiche-patisserie && npm run type-check 2>&1)",
+      "Bash(cd /c/Users/Nassim/Documents/dev/fiche-patisserie && npm run lint 2>&1)",
+      "Bash(head:*)",
+      "Bash(grep error\\\\[:*)",
+      "Bash(grep:*)",
+      "Bash(cd /c/Users/Nassim/Documents/dev/fiche-patisserie && npx oxlint src/stores/ingredients.ts -D correctness 2>&1)"
+    ]
+  }
+}

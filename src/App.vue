@@ -1,12 +1,10 @@
 <script setup lang="ts">
-import  Navbar from './components/Navbar.vue';
-import Recipe from './views/Recipe.vue';
-
+import Navbar from './components/Navbar.vue'
 </script>
 
 <template>
-<Navbar></Navbar>
-<Recipe/> 
+  <Navbar />
+  <router-view />
 </template>
 
 <style scoped></style>

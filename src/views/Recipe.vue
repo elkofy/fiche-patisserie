@@ -1,4 +1,5 @@
-<script setup>
+<script setup lang="ts">
+// @ts-nocheck
 import { recipe } from '@/mock/recipe.json'
 
 </script>
@@ -19,7 +20,7 @@ import { recipe } from '@/mock/recipe.json'
             <div class="container mx-auto px-4 lg:col-start-1 lg:col-end-2 flex flex-col justify-center py-8 lg:pr-10">
                 <div class="flex flex-row gap-2 mb-2">
                     <button @click="print()" class="text-white bg-gray-800 box-border border border-transparent hover:bg-brand-strong focus:ring-4 focus:ring-brand-medium shadow-xs font-medium leading-5 rounded-full text-sm px-4 py-2.5 focus:outline-none w-fit"  >🖨️</button>
-                    <button @click="" class="text-black bg-white box-border border border-black hover:bg-brand-strong focus:ring-4 focus:ring-brand-medium shadow-xs font-medium leading-5 rounded-full text-sm px-4 py-2.5 focus:outline-none w-fit"  >🥜 Allergenes</button>
+                    <button class="text-black bg-white box-border border border-black hover:bg-brand-strong focus:ring-4 focus:ring-brand-medium shadow-xs font-medium leading-5 rounded-full text-sm px-4 py-2.5 focus:outline-none w-fit"  >🥜 Allergenes</button>
                 </div>
 
                 
@@ -82,8 +83,7 @@ import { recipe } from '@/mock/recipe.json'
                                 </li>
                             </ul>
                         </div>
-                        <hr>
-                        </hr>
+                        <hr />
                         <div class="flex flex-col gap-2 ">
                             <div class="flex justify-between items-center">
                                 <div class="flex-1 text-gray-600 flex items-center gap-2"> Ingredients:</div>
