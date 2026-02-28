@@ -33,7 +33,7 @@ export const useRecipesStore = defineStore('recipes', () => {
     }
   }
 
-  async function create(data: Omit<Recipe, 'id' | 'createdAt' | 'updatedAt' | 'deletedAt'>) {
+  async function create(data: Omit<Recipe, 'ID' | 'CreatedAt' | 'UpdatedAt' | 'DeletedAt'>) {
     loading.value = true
     error.value = null
     try {
@@ -47,13 +47,13 @@ export const useRecipesStore = defineStore('recipes', () => {
     }
   }
 
-  async function update(id: number, data: Partial<Omit<Recipe, 'id' | 'createdAt' | 'updatedAt' | 'deletedAt'>>) {
+  async function update(id: number, data: Partial<Omit<Recipe, 'ID' | 'CreatedAt' | 'UpdatedAt' | 'DeletedAt'>>) {
     loading.value = true
     error.value = null
     try {
       const updated = await api.updateRecipe(id, data)
-      list.value = list.value.map((r) => (r.id === id ? updated : r))
-      if (current.value?.id === id) current.value = updated
+      list.value = list.value.map((r) => (r.ID === id ? updated : r))
+      if (current.value?.ID === id) current.value = updated
       return updated
     } catch (e) {
       error.value = (e as Error).message
@@ -67,7 +67,7 @@ export const useRecipesStore = defineStore('recipes', () => {
     error.value = null
     try {
       await api.deleteRecipe(id)
-      list.value = list.value.filter((r) => r.id !== id)
+      list.value = list.value.filter((r) => r.ID !== id)
     } catch (e) {
       error.value = (e as Error).message
     } finally {

@@ -3,6 +3,7 @@ import { ref, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { storeToRefs } from 'pinia'
 import { useIngredientsStore } from '@/stores/ingredients'
+import * as api from '@/services/api'
 
 const route = useRoute()
 const router = useRouter()
@@ -20,8 +21,7 @@ const allergensRaw = ref('')
 
 onMounted(async () => {
   if (isEdit.value) {
-    await store.fetchOne(id.value)
-    const ing = store.current
+    const ing = await api.getIngredient(id.value)
     if (ing) {
       name.value = ing.name
       unit.value = ing.unit
@@ -67,6 +67,7 @@ async function handleSubmit() {
           <input
             v-model="name"
             required
+            data-testid="ingredient-name"
             class="border border-gray-400 rounded-lg px-3 py-2 w-full text-sm"
             placeholder="Farine de blé"
           />
@@ -78,6 +79,7 @@ async function handleSubmit() {
             <input
               v-model="unit"
               required
+              data-testid="ingredient-unit"
               class="border border-gray-400 rounded-lg px-3 py-2 w-full text-sm"
               placeholder="g, kg, L, pièce…"
             />
@@ -89,6 +91,7 @@ async function handleSubmit() {
               type="number"
               min="0"
               step="0.01"
+              data-testid="ingredient-price"
               class="border border-gray-400 rounded-lg px-3 py-2 w-full text-sm"
             />
           </div>
@@ -98,6 +101,7 @@ async function handleSubmit() {
           <label class="block text-sm font-medium mb-1">Catégorie</label>
           <input
             v-model="category"
+            data-testid="ingredient-category"
             class="border border-gray-400 rounded-lg px-3 py-2 w-full text-sm"
             placeholder="Farine, Produit laitier, Fruit…"
           />
@@ -109,6 +113,7 @@ async function handleSubmit() {
           </label>
           <input
             v-model="allergensRaw"
+            data-testid="ingredient-allergens"
             class="border border-gray-400 rounded-lg px-3 py-2 w-full text-sm"
             placeholder="Gluten, Lactose, Oeuf…"
           />
@@ -120,6 +125,7 @@ async function handleSubmit() {
           <button
             type="submit"
             :disabled="loading"
+            data-testid="ingredient-submit"
             class="bg-gray-800 text-white rounded-full px-6 py-2.5 text-sm font-medium hover:opacity-80 disabled:opacity-50"
           >
             {{ loading ? 'Enregistrement…' : isEdit ? 'Mettre à jour' : 'Créer' }}

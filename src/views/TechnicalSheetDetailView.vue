@@ -17,7 +17,7 @@ function handlePrint() {
 
 async function handleDelete() {
   if (sheet.value && confirm('Supprimer cette fiche technique ?')) {
-    await store.remove(sheet.value.id)
+    await store.remove(sheet.value.ID)
     router.push('/')
   }
 }
@@ -50,7 +50,7 @@ async function handleDelete() {
               🖨️
             </button>
             <RouterLink
-              :to="`/technicalsheets/${sheet.id}/edit`"
+              :to="`/technicalsheets/${sheet.ID}/edit`"
               class="bg-white border border-black text-black rounded-full px-4 py-2.5 text-sm font-medium hover:opacity-70"
             >
               Modifier
@@ -77,8 +77,11 @@ async function handleDelete() {
           </div>
 
           <div class="flex flex-col gap-1 text-sm">
-            <div v-if="sheet.mold">
-              Moule : {{ sheet.mold.shape }} Ø{{ sheet.mold.dimensions.length }}cm
+            <div v-if="sheet.mold?.shape">
+              Moule : {{ sheet.mold.shape }}
+              <template v-if="sheet.mold.dimensions?.length">
+                Ø{{ sheet.mold.dimensions.length }}cm
+              </template>
             </div>
             <div v-if="sheet.yield?.servings">
               Portions : {{ sheet.yield.servings }}
@@ -105,7 +108,7 @@ async function handleDelete() {
         <div v-else class="space-y-10">
           <div
             v-for="recipe in sheet.recipes"
-            :key="recipe.id"
+            :key="recipe.ID"
             class="border border-gray-400 rounded-2xl overflow-hidden"
           >
             <div class="py-4 px-4 text-lg font-black uppercase border-b-3 border-black">

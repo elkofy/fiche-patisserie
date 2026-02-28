@@ -40,7 +40,7 @@ async function handleDelete(id: number) {
       <div v-else class="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div
           v-for="sheet in list"
-          :key="sheet.id"
+          :key="sheet.ID"
           class="border border-gray-400 rounded-2xl overflow-hidden hover:shadow-md transition-shadow"
         >
           <div class="py-4 px-4 text-lg font-black text-center uppercase border-b-3 border-black">
@@ -72,20 +72,20 @@ async function handleDelete(id: number) {
 
             <div class="flex gap-2">
               <RouterLink
-                :to="`/technicalsheets/${sheet.id}`"
+                :to="`/technicalsheets/${sheet.ID}`"
                 class="flex-1 text-center bg-gray-800 text-white rounded-full px-3 py-2 text-sm font-medium hover:opacity-80 transition-opacity"
               >
                 Voir
               </RouterLink>
               <RouterLink
-                :to="`/technicalsheets/${sheet.id}/edit`"
+                :to="`/technicalsheets/${sheet.ID}/edit`"
                 class="flex-1 text-center bg-white border border-black text-black rounded-full px-3 py-2 text-sm font-medium hover:opacity-70 transition-opacity"
               >
                 Modifier
               </RouterLink>
               <button
                 class="text-red-600 hover:opacity-70 text-sm px-2"
-                @click="handleDelete(sheet.id)"
+                @click="handleDelete(sheet.ID)"
               >
                 ✕
               </button>

@@ -1,8 +1,8 @@
 export interface GormModel {
-  id: number
-  createdAt: string
-  updatedAt: string
-  deletedAt: string | null
+  ID: number
+  CreatedAt: string
+  UpdatedAt: string
+  DeletedAt: string | null
 }
 
 export interface Temperature {

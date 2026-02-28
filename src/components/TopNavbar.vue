@@ -7,15 +7,15 @@
           <path fill="none" stroke-width="1" d="M10.5 10.5 L16 16"></path>
         </svg>
       </button>
-      <RouterLink to="/home">
+      <RouterLink to="/">
         <div class="text-2xl font-bold">MILLE FICHES</div>
       </RouterLink>
 
-      <button class="p-1">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 16 16">
-          <path d="M0 2h16M0 8h16M0 14h16"></path>
-        </svg>
-      </button>
+      <nav class="flex items-center gap-4 text-sm font-medium">
+        <RouterLink to="/" class="hover:opacity-60 transition-opacity">Fiches</RouterLink>
+        <RouterLink to="/recipes" class="hover:opacity-60 transition-opacity">Recettes</RouterLink>
+        <RouterLink to="/ingredients" class="hover:opacity-60 transition-opacity">Ingrédients</RouterLink>
+      </nav>
     </div>
   </header>
 

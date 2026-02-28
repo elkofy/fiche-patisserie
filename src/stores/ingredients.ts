@@ -33,7 +33,7 @@ export const useIngredientsStore = defineStore('ingredients', () => {
     }
   }
 
-  async function create(data: Omit<Ingredient, 'id' | 'createdAt' | 'updatedAt' | 'deletedAt'>) {
+  async function create(data: Omit<Ingredient, 'ID' | 'CreatedAt' | 'UpdatedAt' | 'DeletedAt'>) {
     loading.value = true
     error.value = null
     try {
@@ -47,13 +47,13 @@ export const useIngredientsStore = defineStore('ingredients', () => {
     }
   }
 
-  async function update(id: number, data: Partial<Omit<Ingredient, 'id' | 'createdAt' | 'updatedAt' | 'deletedAt'>>) {
+  async function update(id: number, data: Partial<Omit<Ingredient, 'ID' | 'CreatedAt' | 'UpdatedAt' | 'DeletedAt'>>) {
     loading.value = true
     error.value = null
     try {
       const updated = await api.updateIngredient(id, data)
-      list.value = list.value.map((i) => (i.id === id ? updated : i))
-      if (current.value?.id === id) current.value = updated
+      list.value = list.value.map((i) => (i.ID === id ? updated : i))
+      if (current.value?.ID === id) current.value = updated
       return updated
     } catch (e) {
       error.value = (e as Error).message
@@ -67,7 +67,7 @@ export const useIngredientsStore = defineStore('ingredients', () => {
     error.value = null
     try {
       await api.deleteIngredient(id)
-      list.value = list.value.filter((i) => i.id !== id)
+      list.value = list.value.filter((i) => i.ID !== id)
     } catch (e) {
       error.value = (e as Error).message
     } finally {

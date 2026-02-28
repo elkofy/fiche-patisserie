@@ -40,7 +40,7 @@ async function handleDelete(id: number) {
       <div v-else class="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div
           v-for="recipe in list"
-          :key="recipe.id"
+          :key="recipe.ID"
           class="border border-gray-400 rounded-2xl overflow-hidden hover:shadow-md transition-shadow"
         >
           <div class="py-4 px-4 text-lg font-black text-center uppercase border-b-3 border-black">
@@ -78,20 +78,20 @@ async function handleDelete(id: number) {
 
             <div class="flex gap-2">
               <RouterLink
-                :to="`/recipes/${recipe.id}`"
+                :to="`/recipes/${recipe.ID}`"
                 class="flex-1 text-center bg-gray-800 text-white rounded-full px-3 py-2 text-sm font-medium hover:opacity-80"
               >
                 Voir
               </RouterLink>
               <RouterLink
-                :to="`/recipes/${recipe.id}/edit`"
+                :to="`/recipes/${recipe.ID}/edit`"
                 class="flex-1 text-center bg-white border border-black text-black rounded-full px-3 py-2 text-sm font-medium hover:opacity-70"
               >
                 Modifier
               </RouterLink>
               <button
                 class="text-red-600 hover:opacity-70 text-sm px-2"
-                @click="handleDelete(recipe.id)"
+                @click="handleDelete(recipe.ID)"
               >
                 ✕
               </button>

@@ -56,7 +56,7 @@ async function handleDelete(id: number) {
           <tbody>
             <tr
               v-for="ing in list"
-              :key="ing.id"
+              :key="ing.ID"
               class="border-b border-gray-100 hover:bg-gray-50 transition-colors"
             >
               <td class="px-4 py-3 font-medium">{{ ing.name }}</td>
@@ -78,14 +78,14 @@ async function handleDelete(id: number) {
               <td class="px-4 py-3">
                 <div class="flex gap-3 justify-end">
                   <RouterLink
-                    :to="`/ingredients/${ing.id}/edit`"
+                    :to="`/ingredients/${ing.ID}/edit`"
                     class="text-gray-600 hover:text-black text-xs underline"
                   >
                     Modifier
                   </RouterLink>
                   <button
                     class="text-red-600 hover:opacity-70 text-xs"
-                    @click="handleDelete(ing.id)"
+                    @click="handleDelete(ing.ID)"
                   >
                     Supprimer
                   </button>

@@ -103,7 +103,7 @@ async function handleSubmit() {
     if (!recipesStore.error) router.push(`/recipes/${id.value}`)
   } else {
     const created = await recipesStore.create(payload)
-    if (created) router.push(`/recipes/${created.id}`)
+    if (created) router.push(`/recipes/${created.ID}`)
   }
 }
 </script>
@@ -122,6 +122,7 @@ async function handleSubmit() {
           <input
             v-model="name"
             required
+            data-testid="recipe-name"
             class="border border-gray-400 rounded-lg px-3 py-2 w-full text-sm"
             placeholder="Crème pâtissière"
           />
@@ -132,6 +133,7 @@ async function handleSubmit() {
           <textarea
             v-model="description"
             rows="2"
+            data-testid="recipe-description"
             class="border border-gray-400 rounded-lg px-3 py-2 w-full text-sm"
           />
         </div>
@@ -141,6 +143,7 @@ async function handleSubmit() {
           <input
             v-model="image"
             type="url"
+            data-testid="recipe-image"
             class="border border-gray-400 rounded-lg px-3 py-2 w-full text-sm"
           />
         </div>
@@ -149,6 +152,7 @@ async function handleSubmit() {
           <label class="block text-sm font-medium mb-1">Tags (séparés par des virgules)</label>
           <input
             v-model="tagsRaw"
+            data-testid="recipe-tags"
             class="border border-gray-400 rounded-lg px-3 py-2 w-full text-sm"
           />
         </div>
@@ -160,6 +164,7 @@ async function handleSubmit() {
               v-model.number="totalTime"
               type="number"
               min="1"
+              data-testid="recipe-time"
               class="border border-gray-400 rounded-lg px-3 py-2 w-full text-sm"
             />
           </div>
@@ -169,6 +174,7 @@ async function handleSubmit() {
               v-model.number="servings"
               type="number"
               min="1"
+              data-testid="recipe-servings"
               class="border border-gray-400 rounded-lg px-3 py-2 w-full text-sm"
             />
           </div>
@@ -180,6 +186,7 @@ async function handleSubmit() {
             <label class="text-sm font-medium">Ingrédients</label>
             <button
               type="button"
+              data-testid="add-ingredient-btn"
               class="bg-white border border-black text-black rounded-full px-3 py-1.5 text-xs font-medium hover:opacity-70"
               @click="addIngredientRow"
             >
@@ -195,6 +202,7 @@ async function handleSubmit() {
             <div
               v-for="(ri, idx) in recipeIngredients"
               :key="idx"
+              :data-testid="`ingredient-row-${idx}`"
               class="flex gap-2 items-center"
             >
               <select
@@ -204,8 +212,8 @@ async function handleSubmit() {
                 <option value="0" disabled>Choisir…</option>
                 <option
                   v-for="ing in ingredientList"
-                  :key="ing.id"
-                  :value="ing.id"
+                  :key="ing.ID"
+                  :value="ing.ID"
                 >
                   {{ ing.name }}
                 </option>
@@ -240,6 +248,7 @@ async function handleSubmit() {
             <label class="text-sm font-medium">Étapes</label>
             <button
               type="button"
+              data-testid="add-step-btn"
               class="bg-white border border-black text-black rounded-full px-3 py-1.5 text-xs font-medium hover:opacity-70"
               @click="addStep"
             >
@@ -255,6 +264,7 @@ async function handleSubmit() {
             <div
               v-for="(step, idx) in steps"
               :key="idx"
+              :data-testid="`step-row-${idx}`"
               class="border border-gray-200 rounded-xl p-4 space-y-3"
             >
               <div class="flex items-center justify-between">
@@ -295,6 +305,7 @@ async function handleSubmit() {
           <button
             type="submit"
             :disabled="loading"
+            data-testid="recipe-submit"
             class="bg-gray-800 text-white rounded-full px-6 py-2.5 text-sm font-medium hover:opacity-80 disabled:opacity-50"
           >
             {{ loading ? 'Enregistrement…' : isEdit ? 'Mettre à jour' : 'Créer' }}

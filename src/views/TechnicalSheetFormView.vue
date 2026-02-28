@@ -38,7 +38,7 @@ onMounted(async () => {
       tagsRaw.value = (s.tags ?? []).join(', ')
       totalTime.value = s.timings?.totalTime ?? 60
       servings.value = s.yield?.servings ?? 8
-      selectedRecipeIds.value = (s.recipes ?? []).map((r) => r.id)
+      selectedRecipeIds.value = (s.recipes ?? []).map((r) => r.ID)
     }
   }
 })
@@ -72,7 +72,7 @@ async function handleSubmit() {
     if (!sheetsStore.error) router.push(`/technicalsheets/${id.value}`)
   } else {
     const created = await sheetsStore.create(payload)
-    if (created) router.push(`/technicalsheets/${created.id}`)
+    if (created) router.push(`/technicalsheets/${created.ID}`)
   }
 }
 </script>
@@ -91,6 +91,7 @@ async function handleSubmit() {
           <input
             v-model="title"
             required
+            data-testid="sheet-title"
             class="border border-gray-400 rounded-lg px-3 py-2 w-full text-sm"
             placeholder="Tarte à la framboise"
           />
@@ -102,6 +103,7 @@ async function handleSubmit() {
           <textarea
             v-model="description"
             rows="3"
+            data-testid="sheet-description"
             class="border border-gray-400 rounded-lg px-3 py-2 w-full text-sm"
           />
         </div>
@@ -111,6 +113,7 @@ async function handleSubmit() {
           <label class="block text-sm font-medium mb-1">Niveau</label>
           <select
             v-model="difficulty"
+            data-testid="sheet-difficulty"
             class="border border-gray-400 rounded-lg px-3 py-2 w-full text-sm"
           >
             <option value="beginner">Débutant</option>
@@ -125,6 +128,7 @@ async function handleSubmit() {
           <input
             v-model="image"
             type="url"
+            data-testid="sheet-image"
             class="border border-gray-400 rounded-lg px-3 py-2 w-full text-sm"
             placeholder="https://…"
           />
@@ -135,6 +139,7 @@ async function handleSubmit() {
           <label class="block text-sm font-medium mb-1">Tags (séparés par des virgules)</label>
           <input
             v-model="tagsRaw"
+            data-testid="sheet-tags"
             class="border border-gray-400 rounded-lg px-3 py-2 w-full text-sm"
             placeholder="Fruit, Chocolat, Végétalien"
           />
@@ -148,6 +153,7 @@ async function handleSubmit() {
               v-model.number="totalTime"
               type="number"
               min="1"
+              data-testid="sheet-time"
               class="border border-gray-400 rounded-lg px-3 py-2 w-full text-sm"
             />
           </div>
@@ -157,6 +163,7 @@ async function handleSubmit() {
               v-model.number="servings"
               type="number"
               min="1"
+              data-testid="sheet-servings"
               class="border border-gray-400 rounded-lg px-3 py-2 w-full text-sm"
             />
           </div>
@@ -177,13 +184,13 @@ async function handleSubmit() {
           <div v-else class="space-y-2">
             <label
               v-for="recipe in recipeList"
-              :key="recipe.id"
+              :key="recipe.ID"
               class="flex items-center gap-2 cursor-pointer"
             >
               <input
                 v-model="selectedRecipeIds"
                 type="checkbox"
-                :value="recipe.id"
+                :value="recipe.ID"
                 class="rounded"
               />
               <span class="text-sm">{{ recipe.name }}</span>
@@ -197,6 +204,7 @@ async function handleSubmit() {
           <button
             type="submit"
             :disabled="loading"
+            data-testid="sheet-submit"
             class="bg-gray-800 text-white rounded-full px-6 py-2.5 text-sm font-medium hover:opacity-80 disabled:opacity-50"
           >
             {{ loading ? 'Enregistrement…' : isEdit ? 'Mettre à jour' : 'Créer' }}

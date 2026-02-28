@@ -13,7 +13,7 @@ onMounted(() => store.fetchOne(Number(route.params.id)))
 
 async function handleDelete() {
   if (recipe.value && confirm('Supprimer cette recette ?')) {
-    await store.remove(recipe.value.id)
+    await store.remove(recipe.value.ID)
     router.push('/recipes')
   }
 }
@@ -38,7 +38,7 @@ async function handleDelete() {
         <div class="flex flex-col justify-center py-8 lg:pr-10">
           <div class="flex gap-2 mb-4">
             <RouterLink
-              :to="`/recipes/${recipe.id}/edit`"
+              :to="`/recipes/${recipe.ID}/edit`"
               class="bg-white border border-black text-black rounded-full px-4 py-2.5 text-sm font-medium hover:opacity-70"
             >
               Modifier
@@ -65,8 +65,11 @@ async function handleDelete() {
           </div>
 
           <div class="text-sm space-y-1">
-            <div v-if="recipe.mold">
-              Moule : {{ recipe.mold.shape }} Ø{{ recipe.mold.dimensions.length }}cm
+            <div v-if="recipe.mold?.shape">
+              Moule : {{ recipe.mold.shape }}
+              <template v-if="recipe.mold.dimensions?.length">
+                Ø{{ recipe.mold.dimensions.length }}cm
+              </template>
             </div>
             <div v-if="recipe.yield?.servings">
               Portions : {{ recipe.yield.servings }}

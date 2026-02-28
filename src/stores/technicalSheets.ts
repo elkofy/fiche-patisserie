@@ -33,7 +33,7 @@ export const useTechnicalSheetsStore = defineStore('technicalSheets', () => {
     }
   }
 
-  async function create(data: Omit<TechnicalSheet, 'id' | 'createdAt' | 'updatedAt' | 'deletedAt'>) {
+  async function create(data: Omit<TechnicalSheet, 'ID' | 'CreatedAt' | 'UpdatedAt' | 'DeletedAt'>) {
     loading.value = true
     error.value = null
     try {
@@ -49,14 +49,14 @@ export const useTechnicalSheetsStore = defineStore('technicalSheets', () => {
 
   async function update(
     id: number,
-    data: Partial<Omit<TechnicalSheet, 'id' | 'createdAt' | 'updatedAt' | 'deletedAt'>>,
+    data: Partial<Omit<TechnicalSheet, 'ID' | 'CreatedAt' | 'UpdatedAt' | 'DeletedAt'>>,
   ) {
     loading.value = true
     error.value = null
     try {
       const updated = await api.updateTechnicalSheet(id, data)
-      list.value = list.value.map((s) => (s.id === id ? updated : s))
-      if (current.value?.id === id) current.value = updated
+      list.value = list.value.map((s) => (s.ID === id ? updated : s))
+      if (current.value?.ID === id) current.value = updated
       return updated
     } catch (e) {
       error.value = (e as Error).message
@@ -70,7 +70,7 @@ export const useTechnicalSheetsStore = defineStore('technicalSheets', () => {
     error.value = null
     try {
       await api.deleteTechnicalSheet(id)
-      list.value = list.value.filter((s) => s.id !== id)
+      list.value = list.value.filter((s) => s.ID !== id)
     } catch (e) {
       error.value = (e as Error).message
     } finally {

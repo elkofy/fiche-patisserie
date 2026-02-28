@@ -9,7 +9,16 @@
       "Bash(head:*)",
       "Bash(grep error\\\\[:*)",
       "Bash(grep:*)",
-      "Bash(cd /c/Users/Nassim/Documents/dev/fiche-patisserie && npx oxlint src/stores/ingredients.ts -D correctness 2>&1)"
+      "Bash(cd /c/Users/Nassim/Documents/dev/fiche-patisserie && npx oxlint src/stores/ingredients.ts -D correctness 2>&1)",
+      "Bash(npm install:*)",
+      "Bash(npx playwright:*)",
+      "Bash(npm run:*)",
+      "Bash(curl:*)",
+      "Bash(Get-Process:*)",
+      "Bash(tasklist:*)",
+      "Bash(taskkill:*)",
+      "Bash(cmd:*)",
+      "Bash(go build:*)"
     ]
   }
 }

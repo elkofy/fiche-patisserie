@@ -19,17 +19,17 @@ async function request<T>(path: string, options?: RequestInit): Promise<T> {
 
 export const getIngredients = () => request<Ingredient[]>('/ingredients')
 
-export const getIngredient = (id: number) => request<Ingredient>(`/ingredients/${id}`)
+export const getIngredient = (id: number) => request<Ingredient>(`/ingredient/${id}`)
 
-export const createIngredient = (data: Omit<Ingredient, 'id' | 'createdAt' | 'updatedAt' | 'deletedAt'>) =>
-  request<Ingredient>('/ingredients', { method: 'POST', body: JSON.stringify(data) })
+export const createIngredient = (data: Omit<Ingredient, 'ID' | 'CreatedAt' | 'UpdatedAt' | 'DeletedAt'>) =>
+  request<Ingredient>('/ingredient', { method: 'POST', body: JSON.stringify(data) })
 
 export const updateIngredient = (
   id: number,
-  data: Partial<Omit<Ingredient, 'id' | 'createdAt' | 'updatedAt' | 'deletedAt'>>,
-) => request<Ingredient>(`/ingredients/${id}`, { method: 'PUT', body: JSON.stringify(data) })
+  data: Partial<Omit<Ingredient, 'ID' | 'CreatedAt' | 'UpdatedAt' | 'DeletedAt'>>,
+) => request<Ingredient>(`/ingredient/${id}`, { method: 'PATCH', body: JSON.stringify(data) })
 
-export const deleteIngredient = (id: number) => request<void>(`/ingredients/${id}`, { method: 'DELETE' })
+export const deleteIngredient = (id: number) => request<void>(`/ingredient/${id}`, { method: 'DELETE' })
 
 export const uploadIngredients = (file: File) => {
   const form = new FormData()
@@ -41,32 +41,32 @@ export const uploadIngredients = (file: File) => {
 
 export const getRecipes = () => request<Recipe[]>('/recipes')
 
-export const getRecipe = (id: number) => request<Recipe>(`/recipes/${id}`)
+export const getRecipe = (id: number) => request<Recipe>(`/recipe/${id}`)
 
-export const createRecipe = (data: Omit<Recipe, 'id' | 'createdAt' | 'updatedAt' | 'deletedAt'>) =>
-  request<Recipe>('/recipes', { method: 'POST', body: JSON.stringify(data) })
+export const createRecipe = (data: Omit<Recipe, 'ID' | 'CreatedAt' | 'UpdatedAt' | 'DeletedAt'>) =>
+  request<Recipe>('/recipe', { method: 'POST', body: JSON.stringify(data) })
 
 export const updateRecipe = (
   id: number,
-  data: Partial<Omit<Recipe, 'id' | 'createdAt' | 'updatedAt' | 'deletedAt'>>,
-) => request<Recipe>(`/recipes/${id}`, { method: 'PUT', body: JSON.stringify(data) })
+  data: Partial<Omit<Recipe, 'ID' | 'CreatedAt' | 'UpdatedAt' | 'DeletedAt'>>,
+) => request<Recipe>(`/recipe/${id}`, { method: 'PATCH', body: JSON.stringify(data) })
 
-export const deleteRecipe = (id: number) => request<void>(`/recipes/${id}`, { method: 'DELETE' })
+export const deleteRecipe = (id: number) => request<void>(`/recipe/${id}`, { method: 'DELETE' })
 
 // --- TechnicalSheets ---
 
 export const getTechnicalSheets = () => request<TechnicalSheet[]>('/technicalsheets')
 
-export const getTechnicalSheet = (id: number) => request<TechnicalSheet>(`/technicalsheets/${id}`)
+export const getTechnicalSheet = (id: number) => request<TechnicalSheet>(`/technicalsheet/${id}`)
 
 export const createTechnicalSheet = (
-  data: Omit<TechnicalSheet, 'id' | 'createdAt' | 'updatedAt' | 'deletedAt'>,
-) => request<TechnicalSheet>('/technicalsheets', { method: 'POST', body: JSON.stringify(data) })
+  data: Omit<TechnicalSheet, 'ID' | 'CreatedAt' | 'UpdatedAt' | 'DeletedAt'>,
+) => request<TechnicalSheet>('/technicalsheet', { method: 'POST', body: JSON.stringify(data) })
 
 export const updateTechnicalSheet = (
   id: number,
-  data: Partial<Omit<TechnicalSheet, 'id' | 'createdAt' | 'updatedAt' | 'deletedAt'>>,
-) => request<TechnicalSheet>(`/technicalsheets/${id}`, { method: 'PUT', body: JSON.stringify(data) })
+  data: Partial<Omit<TechnicalSheet, 'ID' | 'CreatedAt' | 'UpdatedAt' | 'DeletedAt'>>,
+) => request<TechnicalSheet>(`/technicalsheet/${id}`, { method: 'PATCH', body: JSON.stringify(data) })
 
 export const deleteTechnicalSheet = (id: number) =>
-  request<void>(`/technicalsheets/${id}`, { method: 'DELETE' })
+  request<void>(`/technicalsheet/${id}`, { method: 'DELETE' })
