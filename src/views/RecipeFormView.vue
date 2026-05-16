@@ -5,6 +5,8 @@ import { storeToRefs } from 'pinia'
 import { useRecipesStore } from '@/stores/recipes'
 import { useIngredientsStore } from '@/stores/ingredients'
 import type { RecipeIngredient, Step } from '@/types/api'
+import ImageUpload from '@/components/ImageUpload.vue'
+import VerbSelect from '@/components/VerbSelect.vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -16,46 +18,42 @@ const { list: ingredientList } = storeToRefs(ingredientsStore)
 const isEdit = computed(() => !!route.params.id)
 const id = computed(() => Number(route.params.id))
 
-// Form fields
 const name = ref('')
-const description = ref('')
-const image = ref('')
-const tagsRaw = ref('')
+const imageUrl = ref('')
 const totalTime = ref(60)
-const servings = ref(4)
+const equipements = ref<string[]>([])
+const equipementInput = ref('')
 
-// Ingredients
+function addEquipement() {
+  const val = equipementInput.value.trim()
+  if (val) {
+    equipements.value.push(val)
+    equipementInput.value = ''
+  }
+}
+
+function removeEquipement(index: number) {
+  equipements.value.splice(index, 1)
+}
+
 const recipeIngredients = ref<RecipeIngredient[]>([])
 
 function addIngredientRow() {
-  recipeIngredients.value.push({
-    ingredientId: 0,
-    quantity: 0,
-    unit: 'g',
-    optional: false,
-  })
+  recipeIngredients.value.push({ ingredientId: 0, quantity: 0 })
 }
 
 function removeIngredientRow(index: number) {
   recipeIngredients.value.splice(index, 1)
 }
 
-// Steps
 const steps = ref<Step[]>([])
 
 function addStep() {
-  steps.value.push({
-    order: steps.value.length + 1,
-    title: '',
-    description: '',
-    duration: 0,
-    unit: 'minutes',
-  })
+  steps.value.push({ verb: 'Couper', actionDetail: '', videoUrl: '' })
 }
 
 function removeStep(index: number) {
   steps.value.splice(index, 1)
-  steps.value.forEach((s, i) => { s.order = i + 1 })
 }
 
 onMounted(async () => {
@@ -65,11 +63,9 @@ onMounted(async () => {
     const r = recipesStore.current
     if (r) {
       name.value = r.name
-      description.value = r.description
-      image.value = r.image ?? ''
-      tagsRaw.value = (r.tags ?? []).join(', ')
+      imageUrl.value = r.imageUrl ?? ''
       totalTime.value = r.timings?.totalTime ?? 60
-      servings.value = r.yield?.servings ?? 4
+      equipements.value = r.equipements ?? []
       recipeIngredients.value = r.recipeIngredients?.map((ri) => ({ ...ri })) ?? []
       steps.value = r.steps?.map((s) => ({ ...s })) ?? []
     }
@@ -79,23 +75,15 @@ onMounted(async () => {
 async function handleSubmit() {
   const payload = {
     name: name.value,
-    description: description.value,
-    image: image.value || undefined,
-    tags: tagsRaw.value
-      .split(',')
-      .map((t) => t.trim())
-      .filter(Boolean),
-    timings: {
-      totalTime: totalTime.value,
-      totalUnit: 'minutes',
-    },
-    yield: {
-      servings: servings.value,
-      portions: { type: 'portion', quantity: servings.value },
-    },
+    imageUrl: imageUrl.value,
+    timings: { totalTime: totalTime.value },
+    equipements: equipements.value,
     recipeIngredients: recipeIngredients.value.filter((ri) => ri.ingredientId > 0),
-    steps: steps.value,
-    mold: undefined,
+    steps: steps.value.map((s) => ({
+      verb: s.verb,
+      actionDetail: s.actionDetail,
+      videoUrl: s.videoUrl || undefined,
+    })),
   }
 
   if (isEdit.value) {
@@ -116,7 +104,7 @@ async function handleSubmit() {
       </h1>
 
       <form class="space-y-6" @submit.prevent="handleSubmit">
-        <!-- Basic info -->
+        <!-- Nom -->
         <div>
           <label class="block text-sm font-medium mb-1">Nom *</label>
           <input
@@ -128,59 +116,59 @@ async function handleSubmit() {
           />
         </div>
 
+        <!-- Image -->
         <div>
-          <label class="block text-sm font-medium mb-1">Description</label>
-          <textarea
-            v-model="description"
-            rows="2"
-            data-testid="recipe-description"
-            class="border border-gray-400 rounded-lg px-3 py-2 w-full text-sm"
-          />
+          <label class="block text-sm font-medium mb-1">Image</label>
+          <ImageUpload v-model="imageUrl" />
         </div>
 
+        <!-- Durée totale -->
         <div>
-          <label class="block text-sm font-medium mb-1">URL image</label>
+          <label class="block text-sm font-medium mb-1">Durée totale (min)</label>
           <input
-            v-model="image"
-            type="url"
-            data-testid="recipe-image"
-            class="border border-gray-400 rounded-lg px-3 py-2 w-full text-sm"
+            v-model.number="totalTime"
+            type="number"
+            min="1"
+            data-testid="recipe-time"
+            class="border border-gray-400 rounded-lg px-3 py-2 w-48 text-sm"
           />
         </div>
 
+        <!-- Équipements -->
         <div>
-          <label class="block text-sm font-medium mb-1">Tags (séparés par des virgules)</label>
-          <input
-            v-model="tagsRaw"
-            data-testid="recipe-tags"
-            class="border border-gray-400 rounded-lg px-3 py-2 w-full text-sm"
-          />
+          <label class="block text-sm font-medium mb-2">Équipements</label>
+          <div class="flex gap-2 mb-2">
+            <input
+              v-model="equipementInput"
+              placeholder="Robot pâtissier, cul-de-poule…"
+              class="border border-gray-400 rounded-lg px-3 py-2 flex-1 text-sm"
+              @keydown.enter.prevent="addEquipement"
+            />
+            <button
+              type="button"
+              class="bg-white border border-black text-black rounded-full px-3 py-1.5 text-xs font-medium hover:opacity-70"
+              @click="addEquipement"
+            >
+              + Ajouter
+            </button>
+          </div>
+          <div class="flex flex-wrap gap-2">
+            <span
+              v-for="(eq, idx) in equipements"
+              :key="idx"
+              class="flex items-center gap-1 px-3 py-1 border border-gray-400 rounded-full text-sm"
+            >
+              {{ eq }}
+              <button
+                type="button"
+                class="text-red-500 hover:opacity-70 ml-1 text-xs"
+                @click="removeEquipement(idx)"
+              >✕</button>
+            </span>
+          </div>
         </div>
 
-        <div class="grid grid-cols-2 gap-4">
-          <div>
-            <label class="block text-sm font-medium mb-1">Durée totale (min)</label>
-            <input
-              v-model.number="totalTime"
-              type="number"
-              min="1"
-              data-testid="recipe-time"
-              class="border border-gray-400 rounded-lg px-3 py-2 w-full text-sm"
-            />
-          </div>
-          <div>
-            <label class="block text-sm font-medium mb-1">Portions</label>
-            <input
-              v-model.number="servings"
-              type="number"
-              min="1"
-              data-testid="recipe-servings"
-              class="border border-gray-400 rounded-lg px-3 py-2 w-full text-sm"
-            />
-          </div>
-        </div>
-
-        <!-- Ingredients -->
+        <!-- Ingrédients -->
         <div>
           <div class="flex items-center justify-between mb-3">
             <label class="text-sm font-medium">Ingrédients</label>
@@ -210,11 +198,7 @@ async function handleSubmit() {
                 class="border border-gray-400 rounded-lg px-2 py-2 text-sm flex-1"
               >
                 <option value="0" disabled>Choisir…</option>
-                <option
-                  v-for="ing in ingredientList"
-                  :key="ing.ID"
-                  :value="ing.ID"
-                >
+                <option v-for="ing in ingredientList" :key="ing.ID" :value="ing.ID">
                   {{ ing.name }}
                 </option>
               </select>
@@ -224,12 +208,7 @@ async function handleSubmit() {
                 min="0"
                 step="0.1"
                 placeholder="Qté"
-                class="border border-gray-400 rounded-lg px-2 py-2 w-20 text-sm"
-              />
-              <input
-                v-model="ri.unit"
-                placeholder="unit"
-                class="border border-gray-400 rounded-lg px-2 py-2 w-16 text-sm"
+                class="border border-gray-400 rounded-lg px-2 py-2 w-24 text-sm"
               />
               <button
                 type="button"
@@ -242,7 +221,7 @@ async function handleSubmit() {
           </div>
         </div>
 
-        <!-- Steps -->
+        <!-- Étapes -->
         <div>
           <div class="flex items-center justify-between mb-3">
             <label class="text-sm font-medium">Étapes</label>
@@ -268,7 +247,7 @@ async function handleSubmit() {
               class="border border-gray-200 rounded-xl p-4 space-y-3"
             >
               <div class="flex items-center justify-between">
-                <span class="text-sm font-bold text-gray-500">Étape {{ step.order }}</span>
+                <span class="text-sm font-bold text-gray-500">Étape {{ idx + 1 }}</span>
                 <button
                   type="button"
                   class="text-red-600 hover:opacity-70 text-xs"
@@ -277,23 +256,18 @@ async function handleSubmit() {
                   Supprimer
                 </button>
               </div>
-              <input
-                v-model="step.title"
-                placeholder="Titre de l'étape"
-                class="border border-gray-400 rounded-lg px-3 py-2 w-full text-sm"
-              />
+              <VerbSelect v-model="step.verb" />
               <textarea
-                v-model="step.description"
-                placeholder="Description…"
+                v-model="step.actionDetail"
+                placeholder="Détail de l'action…"
                 rows="2"
                 class="border border-gray-400 rounded-lg px-3 py-2 w-full text-sm"
               />
               <input
-                v-model.number="step.duration"
-                type="number"
-                min="0"
-                placeholder="Durée (min)"
-                class="border border-gray-400 rounded-lg px-3 py-2 w-32 text-sm"
+                v-model="step.videoUrl"
+                placeholder="URL vidéo (optionnel)"
+                type="url"
+                class="border border-gray-400 rounded-lg px-3 py-2 w-full text-sm"
               />
             </div>
           </div>

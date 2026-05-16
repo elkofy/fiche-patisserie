@@ -37,6 +37,17 @@ export const uploadIngredients = (file: File) => {
   return request<Ingredient[]>('/ingredients/upload', { method: 'POST', body: form, headers: {} })
 }
 
+// --- Uploads ---
+
+export const uploadImage = async (file: File): Promise<string> => {
+  const form = new FormData()
+  form.append('file', file)
+  const res = await fetch(`${BASE_URL}/upload/image`, { method: 'POST', body: form })
+  if (!res.ok) throw new Error(`Upload échoué : ${res.statusText}`)
+  const data = await res.json()
+  return data.url as string
+}
+
 // --- Recipes ---
 
 export const getRecipes = () => request<Recipe[]>('/recipes')

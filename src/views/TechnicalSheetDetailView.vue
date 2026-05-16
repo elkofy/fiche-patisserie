@@ -33,15 +33,13 @@ async function handleDelete() {
       <!-- Hero -->
       <section class="grid grid-cols-1 lg:grid-cols-2 lg:gap-0 my-4 container mx-auto px-4 gap-12">
         <div
-          v-if="sheet.image"
+          v-if="sheet.imageUrl"
           class="h-32 lg:h-96 lg:row-start-1 lg:col-start-2 overflow-hidden rounded-lg lg:rounded-none"
         >
-          <img :src="sheet.image" :alt="sheet.title" class="w-full h-full object-cover" />
+          <img :src="sheet.imageUrl" :alt="sheet.name" class="w-full h-full object-cover" />
         </div>
 
-        <div
-          class="container mx-auto px-4 lg:col-start-1 lg:col-end-2 flex flex-col justify-center py-8 lg:pr-10"
-        >
+        <div class="container mx-auto px-4 lg:col-start-1 lg:col-end-2 flex flex-col justify-center py-8 lg:pr-10">
           <div class="flex flex-row gap-2 mb-4">
             <button
               class="bg-gray-800 text-white rounded-full px-4 py-2.5 text-sm font-medium hover:opacity-80"
@@ -63,41 +61,28 @@ async function handleDelete() {
             </button>
           </div>
 
-          <h1 class="text-5xl font-bold mb-4 tracking-tight">{{ sheet.title }}</h1>
+          <h1 class="text-5xl font-bold mb-4 tracking-tight">{{ sheet.name }}</h1>
           <p class="text-xl text-gray-600 mb-6">{{ sheet.description }}</p>
 
-          <div class="mb-6 flex flex-wrap gap-2">
-            <span
-              v-for="tag in sheet.tags"
-              :key="tag"
-              class="px-3 py-2 text-xs font-medium border border-gray-400 rounded-full hover:opacity-70"
-            >
-              {{ tag }}
-            </span>
-          </div>
-
           <div class="flex flex-col gap-1 text-sm">
-            <div v-if="sheet.mold?.shape">
-              Moule : {{ sheet.mold.shape }}
-              <template v-if="sheet.mold.dimensions?.length">
-                Ø{{ sheet.mold.dimensions.length }}cm
-              </template>
-            </div>
             <div v-if="sheet.yield?.servings">
-              Portions : {{ sheet.yield.servings }}
-              <span v-if="sheet.yield.portions?.type">{{ sheet.yield.portions.type }}</span>
+              Rendement : {{ sheet.yield.servings }}
+              <span v-if="sheet.yield.portion?.type"> × {{ sheet.yield.portion.type }}</span>
             </div>
-            <div v-if="sheet.timings?.totalTime">
-              Durée : {{ sheet.timings.totalTime }} min
+            <div v-if="sheet.mold?.shape">
+              Moule : {{ sheet.mold.name }} — {{ sheet.mold.shape }}
+              <span v-if="sheet.mold.capacity"> ({{ sheet.mold.capacity }} cm)</span>
             </div>
-            <div v-if="sheet.difficulty">Niveau : {{ sheet.difficulty }}</div>
+            <div v-if="sheet.conservation" class="text-gray-500">
+              Conservation : {{ sheet.conservation }}
+            </div>
           </div>
         </div>
       </section>
 
       <div class="w-full border-b border-gray-300 mb-4"></div>
 
-      <!-- Recipes -->
+      <!-- Recettes -->
       <div class="container mx-auto px-4 pb-12">
         <h2 class="text-2xl font-bold mb-6 mark w-fit">Recettes</h2>
 
@@ -116,7 +101,7 @@ async function handleDelete() {
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 p-6">
-              <!-- Ingredients -->
+              <!-- Ingrédients -->
               <div class="lg:col-span-1">
                 <h4 class="text-base font-bold mb-4">Ingrédients</h4>
                 <ul class="space-y-3">
@@ -128,28 +113,34 @@ async function handleDelete() {
                     <span class="text-gray-600 text-sm">
                       {{ ri.ingredient?.name ?? `#${ri.ingredientId}` }}
                     </span>
-                    <span class="text-sm font-medium">
-                      {{ ri.quantity }} {{ ri.unit }}
-                    </span>
+                    <span class="text-sm font-medium">{{ ri.quantity }}</span>
                   </li>
                 </ul>
               </div>
 
-              <!-- Steps -->
+              <!-- Étapes -->
               <div class="lg:col-span-2">
                 <h4 class="text-base font-bold mb-4 mark w-fit">Méthode</h4>
                 <div class="space-y-6">
-                  <div v-for="step in recipe.steps" :key="step.order">
+                  <div v-for="(step, idx) in recipe.steps" :key="idx">
                     <h5 class="font-bold mb-1">
-                      Étape {{ step.order }} — {{ step.title }}
+                      Étape {{ idx + 1 }} — {{ step.verb }}
                     </h5>
-                    <p class="text-gray-600 text-sm mb-1">{{ step.description }}</p>
-                    <p v-if="step.duration" class="text-xs text-gray-400">
-                      Durée : {{ step.duration }} min
-                    </p>
+                    <p class="text-gray-600 text-sm mb-1">{{ step.actionDetail }}</p>
                   </div>
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Étapes de finition -->
+        <div v-if="sheet.finishingSteps?.length" class="mt-12">
+          <h2 class="text-2xl font-bold mb-6 mark w-fit">Finitions</h2>
+          <div class="space-y-6">
+            <div v-for="(step, idx) in sheet.finishingSteps" :key="idx">
+              <h5 class="font-bold mb-1">{{ idx + 1 }}. {{ step.verb }}</h5>
+              <p class="text-gray-600 text-sm">{{ step.actionDetail }}</p>
             </div>
           </div>
         </div>

@@ -27,7 +27,7 @@ onMounted(async () => {
       unit.value = ing.unit
       unitPrice.value = ing.unitPrice
       category.value = ing.category ?? ''
-      allergensRaw.value = (ing.allergens ?? []).join(', ')
+      allergensRaw.value = ing.allergen ?? ''
     }
   }
 })
@@ -38,10 +38,7 @@ async function handleSubmit() {
     unit: unit.value,
     unitPrice: unitPrice.value,
     category: category.value || undefined,
-    allergens: allergensRaw.value
-      .split(',')
-      .map((a) => a.trim())
-      .filter(Boolean),
+    allergen: allergensRaw.value.trim() || undefined,
   }
 
   if (isEdit.value) {

@@ -28,89 +28,122 @@ export interface Timings {
   baking?: BakeTiming
   resting?: Timing
   totalTime: number
-  totalUnit: string
 }
-
-export interface Mold {
-  shape: string
-  dimensions: {
-    length: number
-    width: number
-    depth: number
-    unit: string
-  }
-}
-
-export interface Portion {
-  type: string
-  quantity: number
-}
-
-export interface Yield {
-  servings: number
-  portions: Portion
-}
-
-export type Verb = string
 
 export interface Ingredient extends GormModel {
   name: string
+  ref?: string
+  allergen?: string
   unit: string
   unitPrice: number
-  allergens: string[]
   category?: string
+  details?: string
+  supplier?: string
+  energy?: number
 }
 
 export interface RecipeIngredient {
   ingredientId: number
   ingredient?: Ingredient
   quantity: number
-  unit: string
-  notes?: string
-  optional: boolean
 }
+
+export type Verb =
+  | 'Abaisser' | 'Abricoter' | 'Appareiller' | 'Aromatiser' | 'Arroser'
+  | 'Assouplir' | 'Badigeonner' | 'Battre' | 'Blanchir' | 'Bloquer'
+  | 'Bouler' | 'Broyer' | 'Brûler' | 'Candir' | 'Canneler'
+  | 'Caraméliser' | 'Chemiser' | 'Chiqueter' | 'Clarifier' | 'Coller'
+  | 'Colorer' | 'Concasser' | 'Concher' | 'Corner' | 'Coucher'
+  | 'Crémer' | 'Croûter' | 'Décuire' | 'Dégazer' | 'Dessécher'
+  | 'Détailler' | 'Développer' | 'Dorer' | 'Dresser' | 'Ébarber'
+  | 'Écumer' | 'Édulcorer' | 'Effiler' | 'Émonder' | 'Émulsionner'
+  | 'Étamer' | 'Façonner' | 'Fariner' | 'Festonner' | 'Fleurer'
+  | 'Foisonner' | 'Foncer' | 'Fouetter' | 'Fourrer' | 'Fraiser'
+  | 'Frapper' | 'Frémir' | 'Garnir' | 'Glacer' | 'Gommer'
+  | 'Grainer' | 'Graisser' | 'Griller' | 'Imbiber' | 'Infuser'
+  | 'Lever' | 'Lisser' | 'Lustrer' | 'Macaronner' | 'Macérer'
+  | 'Marbrer' | 'Masquer' | 'Meringuer' | 'Monter' | 'Mouler'
+  | 'Napper' | 'Parer' | 'Pétrir' | 'Piquer' | 'Pocher'
+  | 'Pointer' | 'Puncher' | 'Rabattre' | 'Rayer' | 'Resserrer'
+  | 'Rioler' | 'Rompre' | 'Rubanner' | 'Sabler' | 'Sangler'
+  | 'Serrer' | 'Souder' | 'Strier' | 'Tabler' | 'Tamiser'
+  | 'Tamponner' | 'Tourer' | 'Travailler' | 'Tremper' | 'Turbiner'
+  | 'Vanner' | 'Videler' | 'Zester'
+
+export const VERBS: Verb[] = [
+  'Abaisser', 'Abricoter', 'Appareiller', 'Aromatiser', 'Arroser',
+  'Assouplir', 'Badigeonner', 'Battre', 'Blanchir', 'Bloquer',
+  'Bouler', 'Broyer', 'Brûler', 'Candir', 'Canneler',
+  'Caraméliser', 'Chemiser', 'Chiqueter', 'Clarifier', 'Coller',
+  'Colorer', 'Concasser', 'Concher', 'Corner', 'Coucher',
+  'Crémer', 'Croûter', 'Décuire', 'Dégazer', 'Dessécher',
+  'Détailler', 'Développer', 'Dorer', 'Dresser', 'Ébarber',
+  'Écumer', 'Édulcorer', 'Effiler', 'Émonder', 'Émulsionner',
+  'Étamer', 'Façonner', 'Fariner', 'Festonner', 'Fleurer',
+  'Foisonner', 'Foncer', 'Fouetter', 'Fourrer', 'Fraiser',
+  'Frapper', 'Frémir', 'Garnir', 'Glacer', 'Gommer',
+  'Grainer', 'Graisser', 'Griller', 'Imbiber', 'Infuser',
+  'Lever', 'Lisser', 'Lustrer', 'Macaronner', 'Macérer',
+  'Marbrer', 'Masquer', 'Meringuer', 'Monter', 'Mouler',
+  'Napper', 'Parer', 'Pétrir', 'Piquer', 'Pocher',
+  'Pointer', 'Puncher', 'Rabattre', 'Rayer', 'Resserrer',
+  'Rioler', 'Rompre', 'Rubanner', 'Sabler', 'Sangler',
+  'Serrer', 'Souder', 'Strier', 'Tabler', 'Tamiser',
+  'Tamponner', 'Tourer', 'Travailler', 'Tremper', 'Turbiner',
+  'Vanner', 'Videler', 'Zester',
+]
 
 export interface Step {
   id?: number
-  order: number
-  title: string
-  description: string
-  duration: number
-  unit: string
-  ingredientIds?: number[]
-  verbs?: Verb[]
-  notes?: string
+  verb: Verb
+  actionDetail: string
+  videoUrl?: string
+  recipeId?: number
+  technicalSheetId?: number
 }
 
 export interface Recipe extends GormModel {
   name: string
-  description: string
-  timings: Timings
-  mold?: Mold
-  yield: Yield
+  imageUrl: string
   recipeIngredients: RecipeIngredient[]
   steps: Step[]
-  tags?: string[]
-  image?: string
+  timings: Timings
+  equipements: string[]
+}
+
+export interface Mold extends GormModel {
+  name: string
+  shape: string
+  capacity: number
+}
+
+export type PortionType = 'Part' | 'Ramequin'
+
+export interface Portion {
+  type: PortionType
+  quantity: number
+}
+
+export interface Yield {
+  servings: number
+  portion: Portion
+}
+
+export interface AdditionalRecipeStep extends GormModel {
+  recipeId: number
+  technicalSheetId: number
+  stepId: number
 }
 
 export interface TechnicalSheet extends GormModel {
-  title: string
+  name: string
   description: string
-  difficulty: string
-  image?: string
-  tags?: string[]
-  categories?: string[]
-  recipes: Recipe[]
-  timings: Timings
+  moldId?: number
   mold?: Mold
+  recipes: Recipe[]
+  conservation: string
+  imageUrl: string
+  finishingSteps: Step[]
+  additionalRecipeSteps: AdditionalRecipeStep[]
   yield: Yield
-  cost?: {
-    ingredients: number
-    labor: number
-    total: number
-    currency: string
-    unitCost: number
-    margin: number
-  }
 }

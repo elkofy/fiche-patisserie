@@ -4,6 +4,9 @@ import { useRoute, useRouter } from 'vue-router'
 import { storeToRefs } from 'pinia'
 import { useTechnicalSheetsStore } from '@/stores/technicalSheets'
 import { useRecipesStore } from '@/stores/recipes'
+import type { Step } from '@/types/api'
+import ImageUpload from '@/components/ImageUpload.vue'
+import VerbSelect from '@/components/VerbSelect.vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -16,14 +19,23 @@ const { list: recipeList } = storeToRefs(recipesStore)
 const isEdit = computed(() => !!route.params.id)
 const id = computed(() => Number(route.params.id))
 
-const title = ref('')
+const name = ref('')
 const description = ref('')
-const difficulty = ref('intermediate')
-const image = ref('')
-const tagsRaw = ref('')
-const totalTime = ref(60)
+const imageUrl = ref('')
+const conservation = ref('')
 const servings = ref(8)
+const portionType = ref<'Part' | 'Ramequin'>('Part')
+const portionQuantity = ref(1)
 const selectedRecipeIds = ref<number[]>([])
+const finishingSteps = ref<Step[]>([])
+
+function addFinishingStep() {
+  finishingSteps.value.push({ verb: 'Couper', actionDetail: '', videoUrl: '' })
+}
+
+function removeFinishingStep(index: number) {
+  finishingSteps.value.splice(index, 1)
+}
 
 onMounted(async () => {
   await recipesStore.fetchAll()
@@ -31,40 +43,35 @@ onMounted(async () => {
     await sheetsStore.fetchOne(id.value)
     const s = sheetsStore.current
     if (s) {
-      title.value = s.title
+      name.value = s.name
       description.value = s.description
-      difficulty.value = s.difficulty
-      image.value = s.image ?? ''
-      tagsRaw.value = (s.tags ?? []).join(', ')
-      totalTime.value = s.timings?.totalTime ?? 60
+      imageUrl.value = s.imageUrl ?? ''
+      conservation.value = s.conservation ?? ''
       servings.value = s.yield?.servings ?? 8
+      portionType.value = s.yield?.portion?.type ?? 'Part'
+      portionQuantity.value = s.yield?.portion?.quantity ?? 1
       selectedRecipeIds.value = (s.recipes ?? []).map((r) => r.ID)
+      finishingSteps.value = (s.finishingSteps ?? []).map((step) => ({ ...step }))
     }
   }
 })
 
 async function handleSubmit() {
   const payload = {
-    title: title.value,
+    name: name.value,
     description: description.value,
-    difficulty: difficulty.value,
-    image: image.value || undefined,
-    tags: tagsRaw.value
-      .split(',')
-      .map((t) => t.trim())
-      .filter(Boolean),
-    timings: {
-      totalTime: totalTime.value,
-      totalUnit: 'minutes',
-    },
+    imageUrl: imageUrl.value || '',
+    conservation: conservation.value,
     yield: {
       servings: servings.value,
-      portions: { type: 'portion', quantity: servings.value },
+      portion: { type: portionType.value, quantity: portionQuantity.value },
     },
-    recipes: selectedRecipeIds.value.map((rid) => ({ id: rid })) as never,
-    mold: undefined,
-    categories: undefined,
-    cost: undefined,
+    recipes: selectedRecipeIds.value.map((rid) => ({ ID: rid })) as never,
+    finishingSteps: finishingSteps.value.map((s) => ({
+      verb: s.verb,
+      actionDetail: s.actionDetail,
+      videoUrl: s.videoUrl || undefined,
+    })),
   }
 
   if (isEdit.value) {
@@ -85,13 +92,13 @@ async function handleSubmit() {
       </h1>
 
       <form class="space-y-5" @submit.prevent="handleSubmit">
-        <!-- Title -->
+        <!-- Nom -->
         <div>
-          <label class="block text-sm font-medium mb-1">Titre *</label>
+          <label class="block text-sm font-medium mb-1">Nom *</label>
           <input
-            v-model="title"
+            v-model="name"
             required
-            data-testid="sheet-title"
+            data-testid="sheet-name"
             class="border border-gray-400 rounded-lg px-3 py-2 w-full text-sm"
             placeholder="Tarte à la framboise"
           />
@@ -108,74 +115,63 @@ async function handleSubmit() {
           />
         </div>
 
-        <!-- Difficulty -->
-        <div>
-          <label class="block text-sm font-medium mb-1">Niveau</label>
-          <select
-            v-model="difficulty"
-            data-testid="sheet-difficulty"
-            class="border border-gray-400 rounded-lg px-3 py-2 w-full text-sm"
-          >
-            <option value="beginner">Débutant</option>
-            <option value="intermediate">Intermédiaire</option>
-            <option value="advanced">Avancé</option>
-          </select>
-        </div>
-
         <!-- Image -->
         <div>
-          <label class="block text-sm font-medium mb-1">URL image</label>
-          <input
-            v-model="image"
-            type="url"
-            data-testid="sheet-image"
-            class="border border-gray-400 rounded-lg px-3 py-2 w-full text-sm"
-            placeholder="https://…"
-          />
+          <label class="block text-sm font-medium mb-1">Image</label>
+          <ImageUpload v-model="imageUrl" />
         </div>
 
-        <!-- Tags -->
+        <!-- Conservation -->
         <div>
-          <label class="block text-sm font-medium mb-1">Tags (séparés par des virgules)</label>
+          <label class="block text-sm font-medium mb-1">Conservation</label>
           <input
-            v-model="tagsRaw"
-            data-testid="sheet-tags"
+            v-model="conservation"
+            data-testid="sheet-conservation"
             class="border border-gray-400 rounded-lg px-3 py-2 w-full text-sm"
-            placeholder="Fruit, Chocolat, Végétalien"
+            placeholder="3 jours au réfrigérateur…"
           />
         </div>
 
-        <!-- Time & Servings -->
-        <div class="grid grid-cols-2 gap-4">
-          <div>
-            <label class="block text-sm font-medium mb-1">Durée totale (min)</label>
-            <input
-              v-model.number="totalTime"
-              type="number"
-              min="1"
-              data-testid="sheet-time"
-              class="border border-gray-400 rounded-lg px-3 py-2 w-full text-sm"
-            />
-          </div>
-          <div>
-            <label class="block text-sm font-medium mb-1">Portions</label>
-            <input
-              v-model.number="servings"
-              type="number"
-              min="1"
-              data-testid="sheet-servings"
-              class="border border-gray-400 rounded-lg px-3 py-2 w-full text-sm"
-            />
+        <!-- Rendement -->
+        <div>
+          <label class="block text-sm font-medium mb-2">Rendement</label>
+          <div class="grid grid-cols-3 gap-3">
+            <div>
+              <label class="block text-xs text-gray-500 mb-1">Portions</label>
+              <input
+                v-model.number="servings"
+                type="number"
+                min="1"
+                data-testid="sheet-servings"
+                class="border border-gray-400 rounded-lg px-3 py-2 w-full text-sm"
+              />
+            </div>
+            <div>
+              <label class="block text-xs text-gray-500 mb-1">Type</label>
+              <select
+                v-model="portionType"
+                class="border border-gray-400 rounded-lg px-3 py-2 w-full text-sm"
+              >
+                <option value="Part">Part</option>
+                <option value="Ramequin">Ramequin</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs text-gray-500 mb-1">Quantité</label>
+              <input
+                v-model.number="portionQuantity"
+                type="number"
+                min="1"
+                class="border border-gray-400 rounded-lg px-3 py-2 w-full text-sm"
+              />
+            </div>
           </div>
         </div>
 
-        <!-- Recipes -->
+        <!-- Recettes associées -->
         <div>
           <label class="block text-sm font-medium mb-2">Recettes associées</label>
-          <div
-            v-if="recipeList.length === 0"
-            class="text-sm text-gray-400"
-          >
+          <div v-if="recipeList.length === 0" class="text-sm text-gray-400">
             Aucune recette disponible.
             <RouterLink to="/recipes/new" class="text-blue-600 hover:underline">
               Créer une recette
@@ -195,6 +191,56 @@ async function handleSubmit() {
               />
               <span class="text-sm">{{ recipe.name }}</span>
             </label>
+          </div>
+        </div>
+
+        <!-- Étapes de finition -->
+        <div>
+          <div class="flex items-center justify-between mb-3">
+            <label class="text-sm font-medium">Étapes de finition</label>
+            <button
+              type="button"
+              class="bg-white border border-black text-black rounded-full px-3 py-1.5 text-xs font-medium hover:opacity-70"
+              @click="addFinishingStep"
+            >
+              + Ajouter
+            </button>
+          </div>
+
+          <div v-if="finishingSteps.length === 0" class="text-gray-400 text-sm">
+            Aucune étape de finition.
+          </div>
+
+          <div class="space-y-4">
+            <div
+              v-for="(step, idx) in finishingSteps"
+              :key="idx"
+              class="border border-gray-200 rounded-xl p-4 space-y-3"
+            >
+              <div class="flex items-center justify-between">
+                <span class="text-sm font-bold text-gray-500">Finition {{ idx + 1 }}</span>
+                <button
+                  type="button"
+                  class="text-red-600 hover:opacity-70 text-xs"
+                  @click="removeFinishingStep(idx)"
+                >
+                  Supprimer
+                </button>
+              </div>
+              <VerbSelect v-model="step.verb" />
+              <textarea
+                v-model="step.actionDetail"
+                placeholder="Détail de l'action…"
+                rows="2"
+                class="border border-gray-400 rounded-lg px-3 py-2 w-full text-sm"
+              />
+              <input
+                v-model="step.videoUrl"
+                placeholder="URL vidéo (optionnel)"
+                type="url"
+                class="border border-gray-400 rounded-lg px-3 py-2 w-full text-sm"
+              />
+            </div>
           </div>
         </div>
 

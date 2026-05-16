@@ -44,30 +44,19 @@ async function handleDelete(id: number) {
           class="border border-gray-400 rounded-2xl overflow-hidden hover:shadow-md transition-shadow"
         >
           <div class="py-4 px-4 text-lg font-black text-center uppercase border-b-3 border-black">
-            {{ sheet.title }}
+            {{ sheet.name }}
           </div>
 
-          <div v-if="sheet.image" class="h-40 overflow-hidden">
-            <img :src="sheet.image" :alt="sheet.title" class="w-full h-full object-cover" />
+          <div v-if="sheet.imageUrl" class="h-40 overflow-hidden">
+            <img :src="sheet.imageUrl" :alt="sheet.name" class="w-full h-full object-cover" />
           </div>
 
           <div class="p-4">
             <p class="text-gray-600 text-sm mb-3 line-clamp-2">{{ sheet.description }}</p>
 
-            <div class="flex flex-wrap gap-1 mb-4">
-              <span
-                v-for="tag in sheet.tags"
-                :key="tag"
-                class="px-2 py-1 text-xs border border-gray-400 rounded-full"
-              >
-                {{ tag }}
-              </span>
-            </div>
-
             <div class="text-xs text-gray-500 mb-4 space-y-1">
-              <div v-if="sheet.timings?.totalTime">Durée : {{ sheet.timings.totalTime }} min</div>
               <div v-if="sheet.yield?.servings">Portions : {{ sheet.yield.servings }}</div>
-              <div v-if="sheet.difficulty">Niveau : {{ sheet.difficulty }}</div>
+              <div v-if="sheet.conservation">Conservation : {{ sheet.conservation }}</div>
             </div>
 
             <div class="flex gap-2">
