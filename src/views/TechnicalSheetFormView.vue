@@ -30,7 +30,7 @@ const selectedRecipeIds = ref<number[]>([])
 const finishingSteps = ref<Step[]>([])
 
 function addFinishingStep() {
-  finishingSteps.value.push({ verb: 'Couper', actionDetail: '', videoUrl: '' })
+  finishingSteps.value.push({ verb: 'Abaisser', actionDetail: '', videoUrl: '' })
 }
 
 function removeFinishingStep(index: number) {

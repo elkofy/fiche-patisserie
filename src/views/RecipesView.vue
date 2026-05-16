@@ -47,29 +47,14 @@ async function handleDelete(id: number) {
             {{ recipe.name }}
           </div>
 
-          <div v-if="recipe.image" class="h-36 overflow-hidden">
-            <img :src="recipe.image" :alt="recipe.name" class="w-full h-full object-cover" />
+          <div v-if="recipe.imageUrl" class="h-36 overflow-hidden">
+            <img :src="recipe.imageUrl" :alt="recipe.name" class="w-full h-full object-cover" />
           </div>
 
           <div class="p-4">
-            <p class="text-gray-600 text-sm mb-3 line-clamp-2">{{ recipe.description }}</p>
-
-            <div class="flex flex-wrap gap-1 mb-4">
-              <span
-                v-for="tag in recipe.tags"
-                :key="tag"
-                class="px-2 py-1 text-xs border border-gray-400 rounded-full"
-              >
-                {{ tag }}
-              </span>
-            </div>
-
             <div class="text-xs text-gray-500 mb-4 space-y-1">
               <div v-if="recipe.timings?.totalTime">
                 Durée : {{ recipe.timings.totalTime }} min
-              </div>
-              <div v-if="recipe.yield?.servings">
-                Portions : {{ recipe.yield.servings }}
               </div>
               <div v-if="recipe.recipeIngredients?.length">
                 {{ recipe.recipeIngredients.length }} ingrédient(s)

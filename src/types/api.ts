@@ -144,6 +144,6 @@ export interface TechnicalSheet extends GormModel {
   conservation: string
   imageUrl: string
   finishingSteps: Step[]
-  additionalRecipeSteps: AdditionalRecipeStep[]
+  additionalRecipeSteps?: AdditionalRecipeStep[]
   yield: Yield
 }

@@ -64,16 +64,10 @@ async function handleDelete(id: number) {
               <td class="px-4 py-3 text-gray-600">{{ ing.unit }}</td>
               <td class="px-4 py-3 text-gray-600">{{ ing.unitPrice.toFixed(2) }} €</td>
               <td class="px-4 py-3">
-                <div class="flex flex-wrap gap-1">
-                  <span
-                    v-for="a in ing.allergens"
-                    :key="a"
-                    class="px-2 py-0.5 text-xs border border-gray-300 rounded-full"
-                  >
-                    {{ a }}
-                  </span>
-                  <span v-if="!ing.allergens?.length" class="text-gray-400">—</span>
-                </div>
+                <span v-if="ing.allergen" class="px-2 py-0.5 text-xs border border-gray-300 rounded-full">
+                  {{ ing.allergen }}
+                </span>
+                <span v-else class="text-gray-400">—</span>
               </td>
               <td class="px-4 py-3">
                 <div class="flex gap-3 justify-end">

@@ -49,7 +49,7 @@ function removeIngredientRow(index: number) {
 const steps = ref<Step[]>([])
 
 function addStep() {
-  steps.value.push({ verb: 'Couper', actionDetail: '', videoUrl: '' })
+  steps.value.push({ verb: 'Abaisser', actionDetail: '', videoUrl: '' })
 }
 
 function removeStep(index: number) {
